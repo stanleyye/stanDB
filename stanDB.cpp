@@ -2,40 +2,60 @@
  */
 
 #include <boost/program_options.hpp>
+#include <boost/lambda/lambda.hpp>
+#include <boost/tokenizer.hpp>
 namespace po = boost::program_options;
 
 #include <iostream>
 #include <iterator>
 #include <string>
+#include <algorithm>
 
 using namespace std;
+using namespace boost;
 
 void commandLoop() {
-	printf("Welcome to stanDB. For more options, enter --help\n\n");
+	printf("Welcome to stanDB.\n");
+	printf("For more options, enter --help\n");
+
 	string input;
 	po::options_description desc("Allowed options");
 	desc.add_options()
-		("help", "produce help message")
-		("testing",	"testing123123123");
+		("help", "Lists all the available commands.")
+		("exit", "Exit stanDB.")
+		("quit", "Quits stanDB. Same as exit.");
 	po::variables_map vm;
 
+	// loop to keep the program running and accept commands
 	while (1) {
+		vector<string> commands;
+
 		printf("stanDB> ");
-		// User input must end with a ';'
+		// NOTE: User input must end with a ';'
 		getline(cin, input, ';');
 
-		if (input.length() > 0) {
-			input.pop_back();
-		}
-		cout << input << endl;
+		try {
+			tokenizer<> tok(input);
+			for (tokenizer<>::iterator begin = tok.begin(); begin != tok.end(); begin++) {
+				commands.push_back("--" + *begin);
+			}
 
-//		try {
-//
-//			cout << desc << endl;
-//		} catch (exception& e) {
-//			cout << e.what() << "\n";
-//			return;
-//		}
+			po::store(po::command_line_parser(commands).options(desc).run(), vm);
+			po::notify(vm);
+
+			if (vm.count("help")) {
+				cout << desc << endl;
+			}
+
+			if (vm.count("exit") || vm.count("quit")) {
+				printf("Terminating...bye");
+				exit(EXIT_SUCCESS);
+			}
+		} catch (std::exception& e) {
+			printf("%s\n", e.what());
+		}
+
+
 	}
 
 }
