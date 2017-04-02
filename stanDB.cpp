@@ -2,9 +2,11 @@
  */
 
 #include <boost/program_options.hpp>
-#include <boost/lambda/lambda.hpp>
 #include <boost/tokenizer.hpp>
+#include <boost/filesystem.hpp>
+
 namespace po = boost::program_options;
+namespace fs = boost::filesystem;
 
 #include <iostream>
 #include <iterator>
@@ -15,6 +17,7 @@ using namespace std;
 using namespace boost;
 
 void commandLoop() {
+	typedef tokenizer< char_separator<char> > t_tokenizer;
 	printf("Welcome to stanDB.\n");
 	printf("For more options, enter --help\n");
 
@@ -35,9 +38,17 @@ void commandLoop() {
 		getline(cin, input, ';');
 
 		try {
-			tokenizer<> tok(input);
-			for (tokenizer<>::iterator begin = tok.begin(); begin != tok.end(); begin++) {
-				commands.push_back("--" + *begin);
+			// The shell does not support whitespace inside quotes, as whitespace
+			// is used as the delimiter
+			char_separator<char> separator(" ");
+			t_tokenizer tok(input, separator);
+			for (auto begin = tok.begin(); begin != tok.end(); begin++) {
+				string command = *begin;
+				if (command == "exit" || command == "quit") {
+					printf("Terminating...bye.\n");
+					exit(EXIT_SUCCESS);
+				}
+				commands.push_back(*begin);
 			}
 
 			po::store(po::command_line_parser(commands).options(desc).run(), vm);
@@ -45,10 +56,17 @@ void commandLoop() {
 
 			if (vm.count("help")) {
 				cout << desc << endl;
+				vm.erase("help");
 			}
 
 			if (vm.count("exit") || vm.count("quit")) {
-				printf("Terminating...bye");
+				if (vm.count("exit")) {
+					vm.erase("exit");
+				} else {
+					vm.erase("quit");
+				}
+
+				printf("Terminating...bye.\n");
 				exit(EXIT_SUCCESS);
 			}
 		} catch (std::exception& e) {
@@ -57,10 +75,19 @@ void commandLoop() {
 
 
 	}
+}
 
+void createUsersDirectory() {
+	fs::path dir("users");
+	if(!(fs::exists(dir))){
+		if (boost::filesystem::create_directory(dir)) {
+			cout << "The directory " << dir << "has been successfully created" << endl;
+		}
+	}
 }
 
 int main(int argc, char* argv[]) {
+	createUsersDirectory();
     commandLoop();
     return 0;
 }

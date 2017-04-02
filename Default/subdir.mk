@@ -4,12 +4,15 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
+../User.cpp \
 ../stanDB.cpp 
 
 OBJS += \
+./User.o \
 ./stanDB.o 
 
 CPP_DEPS += \
+./User.d \
 ./stanDB.d 
 
 
