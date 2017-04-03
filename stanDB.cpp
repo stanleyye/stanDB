@@ -1,9 +1,7 @@
-/* The simplest usage of the library.
- */
-
 #include <boost/program_options.hpp>
 #include <boost/tokenizer.hpp>
 #include <boost/filesystem.hpp>
+#include <boost/algorithm/string.hpp>
 
 namespace po = boost::program_options;
 namespace fs = boost::filesystem;
@@ -12,25 +10,28 @@ namespace fs = boost::filesystem;
 #include <iterator>
 #include <string>
 #include <algorithm>
+#include <fstream>
+
+#include <User.h>
 
 using namespace std;
 using namespace boost;
 
 void commandLoop() {
 	typedef tokenizer< char_separator<char> > t_tokenizer;
-	printf("Welcome to stanDB.\n");
-	printf("For more options, enter --help\n");
-
 	string input;
 	po::options_description desc("Allowed options");
 	desc.add_options()
 		("help", "Lists all the available commands.")
 		("exit", "Exit stanDB.")
 		("quit", "Quits stanDB. Same as exit.");
-	po::variables_map vm;
+
+	printf("Welcome to stanDB.\n");
+	printf("For more options, enter --help\n");
 
 	// loop to keep the program running and accept commands
-	while (1) {
+	while (true) {
+		po::variables_map vm;
 		vector<string> commands;
 
 		printf("stanDB> ");
@@ -44,6 +45,8 @@ void commandLoop() {
 			t_tokenizer tok(input, separator);
 			for (auto begin = tok.begin(); begin != tok.end(); begin++) {
 				string command = *begin;
+				boost::trim(command);
+				cout << "command : " << command << endl;
 				if (command == "exit" || command == "quit") {
 					printf("Terminating...bye.\n");
 					exit(EXIT_SUCCESS);
@@ -54,40 +57,52 @@ void commandLoop() {
 			po::store(po::command_line_parser(commands).options(desc).run(), vm);
 			po::notify(vm);
 
-			if (vm.count("help")) {
-				cout << desc << endl;
-				vm.erase("help");
-			}
-
 			if (vm.count("exit") || vm.count("quit")) {
-				if (vm.count("exit")) {
-					vm.erase("exit");
-				} else {
-					vm.erase("quit");
-				}
-
 				printf("Terminating...bye.\n");
 				exit(EXIT_SUCCESS);
 			}
+
+			if (vm.count("help")) {
+				cout << desc << endl;
+			}
+
+			// Clear junk left in stream, removing this makes parser not work
+			cin.ignore();
 		} catch (std::exception& e) {
 			printf("%s\n", e.what());
+			// Clear junk left in stream, removing this makes parser not work
+			cin.ignore();
 		}
 
 
 	}
 }
 
-void createUsersDirectory() {
+void adminLogin() {
+	// By default, when the program is started, the default user is the admin user.
+	// TODO: eventually add a login instead of setting default as admin
 	fs::path dir("users");
 	if(!(fs::exists(dir))){
-		if (boost::filesystem::create_directory(dir)) {
-			cout << "The directory " << dir << "has been successfully created" << endl;
+		if (fs::create_directory(dir)) {
+			cout << "The directory " << dir << " has been successfully created" << endl;
+			ofstream ofs("users.dat");
+
+			User* root = new User("root", "");
+			User::addUser(*root);
+
+			// testing purposes
+			vector<User> listOfUsers = User::getListOfUsers();
+			for (vector<User>::iterator i = listOfUsers.begin(); i != listOfUsers.end(); i++) {
+				cout << "testing: " << *i << endl;
+			}
+
+			// TODO: serialize the list of users into users.dat file
 		}
 	}
 }
 
 int main(int argc, char* argv[]) {
-	createUsersDirectory();
+	adminLogin();
     commandLoop();
     return 0;
 }

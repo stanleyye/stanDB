@@ -43,7 +43,7 @@ all: stanDB
 stanDB: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C++ Linker'
-	g++ -std=c++11 -L/usr/local/boost_1_63_0/stage/lib -L/usr/local/boost_1_63_0/boost -L/usr/local/boost_1_63_0/libs -o "stanDB" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++ -std=c++11 -L/usr/local/boost_1_63_0/stage/lib -L/usr/local/boost_1_63_0/boost -L/usr/local/boost_1_63_0/libs -Lboost_algorithm -o "stanDB" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
