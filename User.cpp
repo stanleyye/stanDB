@@ -7,7 +7,8 @@
 
 #include "User.h"
 
-vector<User> User::_listOfUsers;
+vector<User*> User::_listOfUsers;
+User::User() {}
 
 User::User(string id, string password) {
 	// TODO: hash + salt the password
@@ -18,11 +19,11 @@ User::User(string id, string password) {
 	_lastLoggedIn = localtime(&currentTime);
 }
 
-vector<User> User::getListOfUsers() {
+vector<User*> User::getListOfUsers() {
 	return User::_listOfUsers;
 }
 
-void User::addUser(User user) {
+void User::addUser(User* user) {
 	User::_listOfUsers.push_back(user);
 }
 

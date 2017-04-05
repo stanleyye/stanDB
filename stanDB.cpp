@@ -2,6 +2,11 @@
 #include <boost/tokenizer.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/algorithm/string.hpp>
+#include <boost/archive/binary_oarchive.hpp>
+#include <boost/archive/binary_iarchive.hpp>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/serialization/vector.hpp>
 
 namespace po = boost::program_options;
 namespace fs = boost::filesystem;
@@ -85,18 +90,38 @@ void adminLogin() {
 	if(!(fs::exists(dir))){
 		if (fs::create_directory(dir)) {
 			cout << "The directory " << dir << " has been successfully created" << endl;
-			ofstream ofs("users.dat");
 
+			ofstream ofs("users.dat", ios::binary);
+
+			// create the default user 'root'
 			User* root = new User("root", "");
-			User::addUser(*root);
+			User::addUser(root);
 
 			// testing purposes
-			vector<User> listOfUsers = User::getListOfUsers();
-			for (vector<User>::iterator i = listOfUsers.begin(); i != listOfUsers.end(); i++) {
+			vector<User*> listOfUsers = User::getListOfUsers();
+			for (vector<User*>::iterator i = listOfUsers.begin(); i != listOfUsers.end(); i++) {
 				cout << "testing: " << *i << endl;
 			}
 
 			// TODO: serialize the list of users into users.dat file
+			// save data to archive
+			ofstream file("archive.txt");
+			boost::archive::text_oarchive oa(file);
+			oa << root;
+
+			file.close();
+
+			delete root;
+
+			ifstream file1("archive.txt");
+			boost::archive::text_iarchive ia{file1};
+			User* u;
+			ia >> u;
+			cout << "hey" << u->getId() << '\n';
+
+
+
+
 		}
 	}
 }

@@ -12,6 +12,7 @@
 #include <boost/serialization/utility.hpp>
 #include <boost/serialization/list.hpp>
 #include <boost/serialization/assume_abstract.hpp>
+#include <boost/serialization/vector.hpp>
 #include <ctime>
 #include <string>
 #include <vector>
@@ -22,14 +23,15 @@ using namespace std;
 class User {
 public:
 	User(string id, string password);
+	User();
 	virtual ~User();
-	static vector<User> getListOfUsers();
-	static void addUser(User user);
+	static vector<User*> getListOfUsers();
+	static void addUser(User* user);
 	static void deleteUser(string userId);
 	// TODO: change return value later
 	static void findUser(string userId);
 	friend ostream & operator<<(ostream &os, const User &user);
-	friend class boost::serialization::access;
+
 
 	string getId() const;
 
@@ -40,7 +42,13 @@ private:
 	struct tm* _lastLoggedIn;
 	// currently only stores copies of User.
 	// TODO: use reference_wrapper (functional library) and push_back(ref(User)) later
-	static vector<User> _listOfUsers;
+	static vector<User*> _listOfUsers;
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & _id;
+		ar & _listOfUsers;
+	}
 };
 
 #endif /* USER_H_ */
