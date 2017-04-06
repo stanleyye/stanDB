@@ -1,7 +1,9 @@
+#include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <iterator>
 #include <string>
+#include <vector>
 
 #include <User.h>
 #include <boost/algorithm/string.hpp>
@@ -25,7 +27,11 @@ void commandLoop() {
 	desc.add_options()
 		("help", "Lists all the available commands.")
 		("exit", "Exit stanDB.")
-		("quit", "Quits stanDB. Same as exit.");
+		("quit", "Quits stanDB. Same as exit.")
+    	("show", po::value<string>()->required(), "Lists a table of a specified entity.");
+
+	po::positional_options_description positionalOptions;
+	positionalOptions.add("show", 0);
 
 	cout << "Welcome to stanDB." << endl;
 	cout << "For more options, enter --help" << endl << endl;
@@ -61,7 +67,8 @@ void commandLoop() {
 				commands.push_back(*begin);
 			}
 
-			po::store(po::command_line_parser(commands).options(desc).run(), vm);
+			po::store(po::command_line_parser(commands).options(desc)
+					.positional(positionalOptions).run(), vm);
 			po::notify(vm);
 
 			if (vm.count("exit") || vm.count("quit")) {
