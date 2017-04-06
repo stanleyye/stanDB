@@ -1,3 +1,9 @@
+#include <fstream>
+#include <iostream>
+#include <iterator>
+#include <string>
+
+#include <User.h>
 #include <boost/program_options.hpp>
 #include <boost/tokenizer.hpp>
 #include <boost/filesystem.hpp>
@@ -11,14 +17,6 @@
 namespace po = boost::program_options;
 namespace fs = boost::filesystem;
 
-#include <iostream>
-#include <iterator>
-#include <string>
-#include <algorithm>
-#include <fstream>
-
-#include <User.h>
-
 using namespace std;
 using namespace boost;
 
@@ -31,15 +29,15 @@ void commandLoop() {
 		("exit", "Exit stanDB.")
 		("quit", "Quits stanDB. Same as exit.");
 
-	printf("Welcome to stanDB.\n");
-	printf("For more options, enter --help\n");
+	cout << "Welcome to stanDB." << endl;
+	cout << "For more options, enter --help" << endl << endl;
 
 	// loop to keep the program running and accept commands
 	while (true) {
 		po::variables_map vm;
 		vector<string> commands;
 
-		printf("stanDB> ");
+		cout << "stanDB> ";
 		// NOTE: User input must end with a ';'
 		getline(cin, input, ';');
 
@@ -53,7 +51,7 @@ void commandLoop() {
 				boost::trim(command);
 				cout << "command : " << command << endl;
 				if (command == "exit" || command == "quit") {
-					printf("Terminating...bye.\n");
+					cout << "Terminating...bye." << endl;
 					exit(EXIT_SUCCESS);
 				}
 				commands.push_back(*begin);
@@ -63,23 +61,18 @@ void commandLoop() {
 			po::notify(vm);
 
 			if (vm.count("exit") || vm.count("quit")) {
-				printf("Terminating...bye.\n");
+				cout << "Terminating...bye." << endl;
 				exit(EXIT_SUCCESS);
 			}
 
 			if (vm.count("help")) {
 				cout << desc << endl;
 			}
-
-			// Clear junk left in stream, removing this makes parser not work
-			cin.ignore();
 		} catch (std::exception& e) {
-			printf("%s\n", e.what());
-			// Clear junk left in stream, removing this makes parser not work
-			cin.ignore();
+			cout << e.what() << endl;
 		}
-
-
+		// Clear junk left in stream, removing this makes parser not work
+		cin.ignore();
 	}
 }
 
@@ -89,19 +82,13 @@ void adminLogin() {
 	fs::path dir("users");
 	if(!(fs::exists(dir))){
 		if (fs::create_directory(dir)) {
-			cout << "The directory " << dir << " has been successfully created" << endl;
+			cout << "The directory " << dir << " has been successfully created." << endl;
 
 			ofstream ofs("users.dat", ios::binary);
 
 			// create the default user 'root'
 			User* root = new User("root", "");
 			User::addUser(root);
-
-			// testing purposes
-			vector<User*> listOfUsers = User::getListOfUsers();
-			for (vector<User*>::iterator i = listOfUsers.begin(); i != listOfUsers.end(); i++) {
-				cout << "testing: " << *i << endl;
-			}
 
 			// TODO: serialize the list of users into users.dat file
 			// save data to archive
@@ -111,17 +98,14 @@ void adminLogin() {
 
 			file.close();
 
+			// TODO: use RAII
 			delete root;
 
 			ifstream file1("archive.txt");
 			boost::archive::text_iarchive ia{file1};
 			User* u;
 			ia >> u;
-			cout << "hey" << u->getId() << '\n';
-
-
-
-
+			cout << "\nYou are now logged in as: " << u->getId() << "\n\n";
 		}
 	}
 }

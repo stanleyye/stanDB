@@ -1,53 +1,50 @@
-/*
- * User.h
- *
- *  Created on: Apr 1, 2017
- *      Author: stanley
- */
-
 #ifndef USER_H_
 #define USER_H_
 
+#include <iostream>
+#include <string>
+#include <vector>
+
+#include <boost/date_time.hpp>
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/utility.hpp>
 #include <boost/serialization/list.hpp>
 #include <boost/serialization/assume_abstract.hpp>
 #include <boost/serialization/vector.hpp>
-#include <ctime>
-#include <string>
-#include <vector>
-#include <iostream>
 
 using namespace std;
 
 class User {
 public:
+	User() {}
 	User(string id, string password);
-	User();
-	virtual ~User();
+	virtual ~User() {}
+
 	static vector<User*> getListOfUsers();
 	static void addUser(User* user);
 	static void deleteUser(string userId);
-	// TODO: change return value later
+	// TODO: change return value of findUser
 	static void findUser(string userId);
-	friend ostream & operator<<(ostream &os, const User &user);
-
 
 	string getId() const;
 
+	friend ostream & operator<<(ostream &os, const User &user);
 private:
 	string _id; // username
 	string _password;
-	struct tm* _dateCreated;
-	struct tm* _lastLoggedIn;
-	// currently only stores copies of User.
-	// TODO: use reference_wrapper (functional library) and push_back(ref(User)) later
+	string _dateCreated;
+	string _lastLoggedIn;
+
+	// TODO: use reference_wrapper (functional library) and push_back(ref(User))?
 	static vector<User*> _listOfUsers;
 	friend class boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
-		ar & _id;
 		ar & _listOfUsers;
+		ar & _id;
+		ar & _password;
+		ar & _dateCreated;
+		ar & _lastLoggedIn;
 	}
 };
 

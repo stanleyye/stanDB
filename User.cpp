@@ -1,22 +1,18 @@
-/*
- * User.cpp
- *
- *  Created on: Apr 1, 2017
- *      Author: stanley
- */
-
 #include "User.h"
 
 vector<User*> User::_listOfUsers;
-User::User() {}
 
 User::User(string id, string password) {
 	// TODO: hash + salt the password
+	boost::posix_time::ptime now = boost::posix_time::microsec_clock::universal_time();
+	string currentTime = boost::posix_time::to_iso_extended_string(now);
+
 	_id = id;
 	_password = password;
-	time_t currentTime = time(0);
-	_dateCreated = localtime(&currentTime);
-	_lastLoggedIn = localtime(&currentTime);
+	_dateCreated = currentTime;
+	_lastLoggedIn = currentTime;
+
+	cout << "User '" << _id << "' created on " << _dateCreated << endl;
 }
 
 vector<User*> User::getListOfUsers() {
@@ -43,7 +39,3 @@ std::ostream & operator<<(ostream &os, const User &user) {
 	os << "The user's id is " << user.getId() << '\n';
 	return os;
 }
-
-User::~User() {
-}
-
