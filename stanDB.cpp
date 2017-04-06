@@ -4,15 +4,13 @@
 #include <string>
 
 #include <User.h>
-#include <boost/program_options.hpp>
-#include <boost/tokenizer.hpp>
-#include <boost/filesystem.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/archive/binary_oarchive.hpp>
 #include <boost/archive/binary_iarchive.hpp>
-#include <boost/archive/text_oarchive.hpp>
-#include <boost/archive/text_iarchive.hpp>
+#include <boost/filesystem.hpp>
+#include <boost/program_options.hpp>
 #include <boost/serialization/vector.hpp>
+#include <boost/tokenizer.hpp>
 
 namespace po = boost::program_options;
 namespace fs = boost::filesystem;
@@ -84,27 +82,24 @@ void adminLogin() {
 		if (fs::create_directory(dir)) {
 			cout << "The directory " << dir << " has been successfully created." << endl;
 
-			ofstream ofs("users.dat", ios::binary);
-
 			// create the default user 'root'
 			User* root = new User("root", "");
 			User::addUser(root);
 
-			// TODO: serialize the list of users into users.dat file
-			// save data to archive
-			ofstream file("archive.txt");
-			boost::archive::text_oarchive oa(file);
-			oa << root;
+			// serialize root user data to users.dat
+			ofstream userFileOfs("users.dat", ios::binary);
+			boost::archive::binary_oarchive userFileOArchive(userFileOfs);
+			userFileOArchive << root;
 
-			file.close();
+			userFileOfs.close();
 
 			// TODO: use RAII
 			delete root;
 
-			ifstream file1("archive.txt");
-			boost::archive::text_iarchive ia{file1};
+			ifstream userFileIfs("users.dat", ios::binary);
+			boost::archive::binary_iarchive userFileIArchive{userFileIfs};
 			User* u;
-			ia >> u;
+			userFileIArchive >> u;
 			cout << "\nYou are now logged in as: " << u->getId() << "\n\n";
 		}
 	}
