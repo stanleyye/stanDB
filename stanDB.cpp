@@ -30,6 +30,12 @@ void commandLoop() {
 	cout << "Welcome to stanDB." << endl;
 	cout << "For more options, enter --help" << endl << endl;
 
+	/* Testing purposes */
+	vector<User*> v = User::getListOfUsers();
+	for (vector<User*>::iterator i = v.begin(); i != v.end(); i++) {
+		cout << (**i).getId() << endl;
+	}
+
 	// loop to keep the program running and accept commands
 	while (true) {
 		po::variables_map vm;
@@ -74,6 +80,15 @@ void commandLoop() {
 	}
 }
 
+void unserializeUserData() {
+	ifstream userFileIfs("users.dat", ios::binary);
+	boost::archive::binary_iarchive userFileIArchive{userFileIfs};
+	User* user;
+	userFileIArchive >> user;
+	vector<User*> listOfUsers = user->getListOfUsers();
+	User::unserializeListOfUsers(listOfUsers);
+}
+
 void adminLogin() {
 	// By default, when the program is started, the default user is the admin user.
 	// TODO: eventually add a login instead of setting default as admin
@@ -83,25 +98,10 @@ void adminLogin() {
 			cout << "The directory " << dir << " has been successfully created." << endl;
 
 			// create the default user 'root'
-			User* root = new User("root", "");
-			User::addUser(root);
-
-			// serialize root user data to users.dat
-			ofstream userFileOfs("users.dat", ios::binary);
-			boost::archive::binary_oarchive userFileOArchive(userFileOfs);
-			userFileOArchive << root;
-
-			userFileOfs.close();
-
-			// TODO: use RAII
-			delete root;
-
-			ifstream userFileIfs("users.dat", ios::binary);
-			boost::archive::binary_iarchive userFileIArchive{userFileIfs};
-			User* u;
-			userFileIArchive >> u;
-			cout << "\nYou are now logged in as: " << u->getId() << "\n\n";
+			User::addUser("root", "");
 		}
+	} else {
+		unserializeUserData();
 	}
 }
 

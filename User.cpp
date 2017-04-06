@@ -19,8 +19,31 @@ vector<User*> User::getListOfUsers() {
 	return User::_listOfUsers;
 }
 
-void User::addUser(User* user) {
-	User::_listOfUsers.push_back(user);
+void User::unserializeListOfUsers(vector<User*> listOfUsers) {
+	User::_listOfUsers = listOfUsers;
+}
+
+void User::addUser(string id, string password) {
+	User* newUser = new User(id, password);
+	User::_listOfUsers.push_back(newUser);
+
+	// Serialize and unserialize everytime we add a user to persist the users data
+	ofstream userFileOfs("users.dat", ios::binary);
+	boost::archive::binary_oarchive userFileOArchive(userFileOfs);
+	userFileOArchive << newUser;
+
+	userFileOfs.close();
+
+	// TODO: use RAII
+	delete newUser;
+
+	ifstream userFileIfs("users.dat", ios::binary);
+	boost::archive::binary_iarchive userFileIArchive{userFileIfs};
+	User* user;
+	userFileIArchive >> user;
+	User::_listOfUsers = user->getListOfUsers();
+	cout << "\nThe user '" << user->getId() << "' has been created.\n\n";
+
 }
 
 void User::deleteUser(string userId) {

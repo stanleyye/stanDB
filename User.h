@@ -1,10 +1,13 @@
 #ifndef USER_H_
 #define USER_H_
 
+#include <fstream>
 #include <iostream>
 #include <string>
 #include <vector>
 
+#include <boost/archive/binary_oarchive.hpp>
+#include <boost/archive/binary_iarchive.hpp>
 #include <boost/date_time.hpp>
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/utility.hpp>
@@ -21,7 +24,8 @@ public:
 	virtual ~User() {}
 
 	static vector<User*> getListOfUsers();
-	static void addUser(User* user);
+	static void unserializeListOfUsers(vector<User*> listOfUsers);
+	static void addUser(string id, string password);
 	static void deleteUser(string userId);
 	// TODO: change return value of findUser
 	static void findUser(string userId);
