@@ -4,16 +4,19 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
-../User.cpp \
-../stanDB.cpp 
+../CommandOptions.cpp \
+../Main.cpp \
+../User.cpp 
 
 OBJS += \
-./User.o \
-./stanDB.o 
+./CommandOptions.o \
+./Main.o \
+./User.o 
 
 CPP_DEPS += \
-./User.d \
-./stanDB.d 
+./CommandOptions.d \
+./Main.d \
+./User.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

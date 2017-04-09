@@ -1,4 +1,4 @@
-#include "User.h"
+#include <User.hpp>
 
 vector<User*> User::_listOfUsers;
 
@@ -56,6 +56,10 @@ void User::findUser(string userId) {
 
 string User::getId() const {
 	return _id;
+}
+
+string User::getPassword() const {
+	return _password;
 }
 
 std::ostream & operator<<(ostream &os, const User &user) {

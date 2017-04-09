@@ -5,7 +5,6 @@
 #include <string>
 #include <vector>
 
-#include <User.h>
 #include <boost/algorithm/string.hpp>
 #include <boost/archive/binary_oarchive.hpp>
 #include <boost/archive/binary_iarchive.hpp>
@@ -13,6 +12,9 @@
 #include <boost/program_options.hpp>
 #include <boost/serialization/vector.hpp>
 #include <boost/tokenizer.hpp>
+
+#include <User.hpp>
+#include <CommandOptions.hpp>
 
 namespace po = boost::program_options;
 namespace fs = boost::filesystem;
@@ -28,10 +30,12 @@ void commandLoop() {
 		("help", "Lists all the available commands.")
 		("exit", "Exit stanDB.")
 		("quit", "Quits stanDB. Same as exit.")
-    	("show", po::value<string>()->required(), "Lists a table of a specified entity.");
+    	("command", po::value<string>(), "Command to execute.")
+		("arguments", po::value<std::string>(), "Arguments for the command.");;
 
 	po::positional_options_description positionalOptions;
-	positionalOptions.add("show", 0);
+	positionalOptions.add("command", 1).
+					  add("arguments", -1);
 
 	cout << "Welcome to stanDB." << endl;
 	cout << "For more options, enter --help" << endl << endl;
@@ -67,9 +71,19 @@ void commandLoop() {
 				commands.push_back(*begin);
 			}
 
-			po::store(po::command_line_parser(commands).options(desc)
-					.positional(positionalOptions).run(), vm);
+			po::store(
+				po::command_line_parser(commands)
+				.options(desc)
+				.positional(positionalOptions)
+				.run(),
+				vm
+			);
 			po::notify(vm);
+
+			// parse commands
+
+			CommandOptions::parseCommands(vm["command"].as<string>(),
+					vm["arguments"].as<string>());
 
 			if (vm.count("exit") || vm.count("quit")) {
 				cout << "Terminating...bye." << endl;

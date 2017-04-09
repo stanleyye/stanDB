@@ -1,5 +1,5 @@
-#ifndef USER_H_
-#define USER_H_
+#ifndef USER_HPP_
+#define USER_HPP_
 
 #include <fstream>
 #include <iostream>
@@ -31,6 +31,7 @@ public:
 	static void findUser(string userId);
 
 	string getId() const;
+	string getPassword() const;
 
 	friend ostream & operator<<(ostream &os, const User &user);
 private:
@@ -52,4 +53,4 @@ private:
 	}
 };
 
-#endif /* USER_H_ */
+#endif /* USER_HPP_ */
