@@ -17,6 +17,9 @@
 
 using namespace std;
 
+// TODO: instead of this global function, use a lambda instead
+void printTable(vector<string>& titles);
+
 class CommandOptions {
 public:
 	CommandOptions() {};
