@@ -14,7 +14,7 @@
 #include <boost/tokenizer.hpp>
 
 #include "access/user.h"
-#include "cmd/command_options.h"
+#include "command_options.h"
 
 namespace po = boost::program_options;
 namespace fs = boost::filesystem;

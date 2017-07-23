@@ -3,10 +3,10 @@
 Server::Server(QObject *parent)
     : QTcpServer(parent)
 {
-    QThreadPool::globalInstance()->setMaxThreadCount(4);
+    QThreadPool::globalInstance()->setMaxThreadCount(maxThreadCount);
 }
 
-void Server::StartServer()
+void Server::startServer()
 {
     if (this->listen(QHostAddress::Any, portNum)) {
         qDebug() << "Server started at port" << portNum;
@@ -17,5 +17,9 @@ void Server::StartServer()
 
 void Server::incomingConnection(qintptr socketDescriptor)
 {
-    //QThreadPool::globalInstance()->start();
+    RunnableTask *task = new RunnableTask();
+    task->setAutoDelete(true);
+    task->setSocketDescriptor(socketDescriptor);
+
+    QThreadPool::globalInstance()->start(task);
 }

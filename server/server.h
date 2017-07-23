@@ -3,7 +3,8 @@
 
 #include <QTcpServer>
 #include <QThreadPool>
-#include <QDebug>
+
+#include "runnable_task.h"
 
 class Server : public QTcpServer
 {
@@ -11,12 +12,13 @@ class Server : public QTcpServer
 
 public:
     Server(QObject *parent = 0);
-    void StartServer();
+    void startServer();
 
 protected:
     void incomingConnection(qintptr socketDescriptor) override;
 
 private:
+    int maxThreadCount = 4;
     quint16 portNum = 3001;
 };
 

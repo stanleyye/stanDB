@@ -5,7 +5,7 @@
  *      Author: stanley
  */
 
-#include "cmd/command_options.h"
+#include "command_options.h"
 
 void CommandOptions::parseCommands(string command, string arg) {
 	vector<string> titles;
