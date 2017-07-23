@@ -13,8 +13,8 @@
 #include <boost/serialization/vector.hpp>
 #include <boost/tokenizer.hpp>
 
-#include <User.hpp>
-#include <CommandOptions.hpp>
+#include <Server/User.hpp>
+#include <Server/CommandOptions.hpp>
 
 namespace po = boost::program_options;
 namespace fs = boost::filesystem;

@@ -5,7 +5,7 @@
  *      Author: stanley
  */
 
-#include <CommandOptions.hpp>
+#include <Server/CommandOptions.hpp>
 
 void CommandOptions::parseCommands(string command, string arg) {
 	vector<string> titles;

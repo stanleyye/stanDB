@@ -2,18 +2,24 @@
 # You may attempt to use it for building too, by modifying this file here.
 
 #TARGET = stanDB
+CONFIG += qt
 
 HEADERS = \
-   $$PWD/CommandOptions.hpp \
-   $$PWD/User.hpp
+   $$PWD/Server/CommandOptions.hpp \
+   $$PWD/Server/User.hpp
 
 SOURCES = \
-   $$PWD/CommandOptions.cpp \
-   $$PWD/README.md \
-   $$PWD/Server.cpp \
-   $$PWD/User.cpp
+   $$PWD/Server/CommandOptions.cpp \
+   $$PWD/Server/Server.cpp \
+   $$PWD/Server/User.cpp \
 
-INCLUDEPATH =
+INCLUDEPATH += /usr/local/lib/boost_1_64_0
 
+LIBS += \
+        -lboost_date_time \
+        -lboost_filesystem \
+        -lboost_program_options \
+        -lboost_serialization \
+        -lboost_system
 #DEFINES = 
 

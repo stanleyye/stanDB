@@ -13,7 +13,7 @@
 #include <string>
 #include <vector>
 
-#include <User.hpp>
+#include <Server/User.hpp>
 
 using namespace std;
 
@@ -22,8 +22,8 @@ void printTable(vector<string>& titles);
 
 class CommandOptions {
 public:
-	CommandOptions() {};
-	virtual ~CommandOptions() {};
+    CommandOptions() {}
+    virtual ~CommandOptions() {}
 	static void parseCommands(string command, string arg);
 };
 
