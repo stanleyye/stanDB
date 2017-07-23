@@ -1,19 +1,19 @@
 /*
- * CommandOptions.h
+ * command_options.h
  *
  *  Created on: Apr 8, 2017
  *      Author: stanley
  */
 
-#ifndef COMMANDOPTIONS_HPP_
-#define COMMANDOPTIONS_HPP_
+#ifndef COMMAND_OPTIONS_H_
+#define COMMAND_OPTIONS_H_
 
 #include <iostream>
 #include <map>
 #include <string>
 #include <vector>
 
-#include <Server/User.hpp>
+#include <access/user.h>
 
 using namespace std;
 
@@ -27,4 +27,4 @@ public:
 	static void parseCommands(string command, string arg);
 };
 
-#endif /* COMMANDOPTIONS_HPP_ */
+#endif /* COMMAND_OPTIONS_H_ */

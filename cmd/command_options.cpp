@@ -1,11 +1,11 @@
 /*
- * CommandOptions.cpp
+ * command_options.cpp
  *
  *  Created on: Apr 8, 2017
  *      Author: stanley
  */
 
-#include <Server/CommandOptions.hpp>
+#include "cmd/command_options.h"
 
 void CommandOptions::parseCommands(string command, string arg) {
 	vector<string> titles;

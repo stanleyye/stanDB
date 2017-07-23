@@ -1,5 +1,5 @@
-#ifndef USER_HPP_
-#define USER_HPP_
+#ifndef USER_H_
+#define USER_H_
 
 #include <fstream>
 #include <iostream>
@@ -53,4 +53,4 @@ private:
 	}
 };
 
-#endif /* USER_HPP_ */
+#endif /* USER_H_ */

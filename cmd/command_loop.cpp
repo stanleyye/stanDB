@@ -13,8 +13,8 @@
 #include <boost/serialization/vector.hpp>
 #include <boost/tokenizer.hpp>
 
-#include <Server/User.hpp>
-#include <Server/CommandOptions.hpp>
+#include "access/user.h"
+#include "cmd/command_options.h"
 
 namespace po = boost::program_options;
 namespace fs = boost::filesystem;
@@ -126,8 +126,8 @@ void adminLogin() {
 	}
 }
 
-int main(int argc, char* argv[]) {
-	adminLogin();
-    commandLoop();
-    return 0;
-}
+//int main(int argc, char* argv[]) {
+//	adminLogin();
+//    commandLoop();
+//    return 0;
+//}
