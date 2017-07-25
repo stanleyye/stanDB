@@ -14,7 +14,8 @@ HEADERS = \
     access/user.h \
     cmd/command_options.h \
     server/server.h \
-    server/runnable_task.h
+    client/client.h \
+    server/task_runnable.h
 
 SOURCES = \
     access/user.cpp \
@@ -22,7 +23,8 @@ SOURCES = \
     cmd/command_options.cpp \
     main.cpp \
     server/server.cpp \
-    server/runnable_task.cpp
+    client/client.cpp \
+    server/task_runnable.cpp
 
 INCLUDEPATH += /usr/local/lib/boost_1_64_0
 

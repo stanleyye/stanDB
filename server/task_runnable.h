@@ -1,15 +1,17 @@
-#ifndef RUNNABLE_TASK_H
-#define RUNNABLE_TASK_H
+#ifndef TASK_RUNNABLE_H
+#define TASK_RUNNABLE_H
 
 #include <QRunnable>
 #include <QTcpSocket>
 
+#include "client/client.h"
+
 // A task that runs on a thread in a threadpool
 
-class RunnableTask : public QRunnable
+class TaskRunnable : public QRunnable
 {
 public:
-    RunnableTask();
+    TaskRunnable();
     qintptr getSocketDescriptor();
     void setSocketDescriptor(qintptr socket_descriptor);
 
@@ -20,4 +22,4 @@ private:
     qintptr socket_descriptor_;
 };
 
-#endif // RUNNABLE_TASK_H
+#endif // TASK_RUNNABLE_H
