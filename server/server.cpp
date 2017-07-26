@@ -3,15 +3,15 @@
 Server::Server(QObject *parent)
     : QTcpServer(parent)
 {
-    QThreadPool::globalInstance()->setMaxThreadCount(maxThreadCount);
+    QThreadPool::globalInstance()->setMaxThreadCount(max_thread_count_);
 }
 
 void Server::startServer()
 {
-    if (this->listen(QHostAddress::Any, portNum)) {
-        qDebug() << "Server started at port" << portNum;
+    if (this->listen(QHostAddress::Any, port_num_)) {
+        qDebug() << "Server started at port" << port_num_;
     } else {
-        qDebug() << "Server did not start at port " << portNum;
+        qDebug() << "Server did not start at port " << port_num_;
     }
 
     qDebug() << "Ideal thread count: " << QThread::idealThreadCount();
@@ -19,15 +19,11 @@ void Server::startServer()
                 QThreadPool::globalInstance()->maxThreadCount();
 }
 
-void Server::incomingConnection(qintptr socketDescriptor)
+void Server::incomingConnection(qintptr socket_descriptor)
 {
-    qDebug() << "Connecting to socket " << socketDescriptor;
+    qDebug() << "Incoming connection to socket " << socket_descriptor;
 
-    TaskRunnable *task = new TaskRunnable();
-    task->setAutoDelete(true);
-    task->setSocketDescriptor(socketDescriptor);
+    Client *client = new Client(this);
+    client->setSocketDescriptor(socket_descriptor);
 
-    QThreadPool::globalInstance()->start(task);
-    qDebug() << "Active connections(threads): " <<
-                QThreadPool::globalInstance()->activeThreadCount();
 }

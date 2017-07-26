@@ -4,7 +4,7 @@
 #include <QTcpServer>
 #include <QThreadPool>
 
-#include "task_runnable.h"
+#include "client/client.h"
 
 class Server : public QTcpServer
 {
@@ -15,11 +15,11 @@ public:
     void startServer();
 
 protected:
-    void incomingConnection(qintptr socketDescriptor) override;
+    void incomingConnection(qintptr socket_descriptor) override;
 
 private:
-    int maxThreadCount = 4;
-    quint16 portNum = 3001;
+    int max_thread_count_ = 4;
+    quint16 port_num_ = 3001;
 };
 
 #endif // SERVER_H

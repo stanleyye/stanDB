@@ -5,22 +5,28 @@ TaskRunnable::TaskRunnable()
 
 }
 
-void TaskRunnable::setSocketDescriptor(qintptr socket_descriptor)
+void TaskRunnable::setCommand(QString command_to_parse)
 {
-    socket_descriptor_ = socket_descriptor;
+    command_to_parse_ = command_to_parse;
 }
 
 void TaskRunnable::run()
 {
-    if (!socket_descriptor_) {
-        qDebug() << "Socket not defined";
+    if (command_to_parse_.isEmpty() || command_to_parse_.isNull()) {
+        qDebug() << "Command not defined";
         return;
     }
 
-    Client *client = new Client(socket_descriptor_);
+    qDebug() << "Starting task.";
+
+    int endTime = clock() + 60000;
+    do { /* do nothing */ } while (clock() < endTime);
+
+
+    // TODO: parse the commands
 }
 
-qintptr TaskRunnable::getSocketDescriptor()
+void TaskRunnable::responseReady(QByteArray response)
 {
-    return socket_descriptor_;
+
 }

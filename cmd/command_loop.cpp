@@ -37,8 +37,6 @@ void commandLoop() {
 	positionalOptions.add("command", 1).
 					  add("arguments", -1);
 
-	cout << "Welcome to stanDB." << endl;
-	cout << "For more options, enter --help" << endl << endl;
 
 	/* Testing purposes */
 	vector<User*> v = User::getListOfUsers();

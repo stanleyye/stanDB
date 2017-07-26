@@ -4,19 +4,26 @@
 #include <QByteArray>
 #include <QObject>
 #include <QTcpSocket>
+#include <QThreadPool>
+
+#include "server/task_runnable.h"
 
 class Client : public QObject
 {
     Q_OBJECT
 public:
-    explicit Client(qintptr socketDescriptor, QObject *parent = nullptr);
+    explicit Client(QObject *parent = nullptr);
+    void setSocketDescriptor(qintptr socket_descriptor);
+    qintptr getSocketDescriptor();
 
 private:
-    QTcpSocket *socket;
+    QString command_buffer_;
+    QTcpSocket *socket_;
     qintptr socket_descriptor_;
 signals:
 
 public slots:
+    void sendResponse(QByteArray response);
     void socketDisconnected();
     void socketReadyRead();
 };

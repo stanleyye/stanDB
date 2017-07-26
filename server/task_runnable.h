@@ -12,14 +12,16 @@ class TaskRunnable : public QRunnable
 {
 public:
     TaskRunnable();
-    qintptr getSocketDescriptor();
-    void setSocketDescriptor(qintptr socket_descriptor);
+    void setCommand(QString command_to_parse);
 
 protected:
     void run();
 
 private:
-    qintptr socket_descriptor_;
+    QString command_to_parse_;
+
+public slots:
+    void responseReady(QByteArray response);
 };
 
 #endif // TASK_RUNNABLE_H
