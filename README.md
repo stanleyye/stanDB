@@ -1,8 +1,9 @@
 # stanDB
-A relational database management system.    
+A remote multi-threaded relational database management system.
 
 ## Requirements
 - Boost 1.64.0 (including their built library binaries)
+- Atleast 2+ cores (will work with 1 however)
 
 ## Testing
 ```

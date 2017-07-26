@@ -19,10 +19,10 @@ void TaskRunnable::run()
 
     qDebug() << "Starting task.";
 
-    int endTime = clock() + 60000;
+    int endTime = clock() + 6000000;
     do { /* do nothing */ } while (clock() < endTime);
 
-
+    qDebug() << "Task finished";
     // TODO: parse the commands
 }
 
