@@ -3,18 +3,18 @@
 Server::Server(QObject *parent)
     : QTcpServer(parent)
 {
-    QThreadPool::globalInstance()->setMaxThreadCount(max_thread_count_);
+    QThreadPool::globalInstance()->setMaxThreadCount(max_thread_count);
     // Initialize a command manager
     // TODO: memory leak. deallocate command manager
-    command_manager_ = new CommandManager(this);
+    command_manager = new CommandManager(this);
 }
 
 void Server::startServer()
 {
-    if (this->listen(QHostAddress::Any, port_num_)) {
-        qDebug() << "Server started at port" << port_num_;
+    if (this->listen(QHostAddress::Any, port_num)) {
+        qDebug() << "Server started at port" << port_num;
     } else {
-        qDebug() << "Server did not start at port " << port_num_;
+        qDebug() << "Server did not start at port " << port_num;
     }
 
     qDebug() << "Ideal thread count: " << QThread::idealThreadCount();
@@ -30,8 +30,8 @@ void Server::incomingConnection(qintptr socket_descriptor)
     client->setSocketDescriptor(socket_descriptor);
 
     // Chaining grandchild (task runnable instance) to the command manager
-    connect(client, SIGNAL(commandRequestReady(QString&)), command_manager_,
-            SLOT(parseCommand(QString&)));
-    connect(command_manager_, SIGNAL(commandResponseReady(QString&)), client,
+    connect(client, SIGNAL(commandRequestReady(QString&)), command_manager,
+            SLOT(parseCommandLine(QString&)));
+    connect(command_manager, SIGNAL(commandResponseReady(QString&)), client,
             SLOT(commandResponseReady(QString&)));
 }

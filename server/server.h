@@ -19,9 +19,9 @@ protected:
     void incomingConnection(qintptr socket_descriptor) override;
 
 private:
-    CommandManager *command_manager_;
-    int max_thread_count_ = 4;
-    quint16 port_num_ = 3001;
+    CommandManager *command_manager;
+    int max_thread_count = 4;
+    quint16 port_num = 3001;
 };
 
 #endif // SERVER_H

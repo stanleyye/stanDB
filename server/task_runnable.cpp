@@ -7,15 +7,15 @@ TaskRunnable::TaskRunnable()
 
 void TaskRunnable::setCommand(QString command_to_parse)
 {
-    command_to_parse_ = command_to_parse;
+    this->command_to_parse = command_to_parse;
 }
 
 void TaskRunnable::run()
 {
-    if (command_to_parse_.isEmpty() || command_to_parse_.isNull()) {
+    if (command_to_parse.isEmpty() || command_to_parse.isNull()) {
         qDebug() << "Command not defined";
         return;
     }
 
-    emit commandRequestReady(command_to_parse_);
+    emit commandRequestReady(command_to_parse);
 }

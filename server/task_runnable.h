@@ -18,10 +18,10 @@ protected:
     void run();
 
 private:
-    QString command_to_parse_;
+    QString command_to_parse;
 
 signals:
-    void commandRequestReady(QString qString);
+    void commandRequestReady(QString qstring);
 
 public slots:
 };

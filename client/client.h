@@ -17,14 +17,14 @@ public:
     qintptr getSocketDescriptor();
 
 private:
-    QString command_buffer_;
-    QTcpSocket *socket_;
-    qintptr socket_descriptor_;
+    QString command_buffer;
+    QTcpSocket *socket;
+    qintptr socket_descriptor;
 signals:
-    void commandRequestReady(QString &qString);
+    void commandRequestReady(QString &qstring);
 
 public slots:
-    void commandResponseReady(QString &qString);
+    void commandResponseReady(QString &qstring);
     void socketDisconnected();
     void socketReadyRead();
 };
