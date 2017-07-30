@@ -21,9 +21,10 @@ private:
     QTcpSocket *socket_;
     qintptr socket_descriptor_;
 signals:
+    void commandRequestReady(QString &qString);
 
 public slots:
-    void sendResponse(QByteArray response);
+    void commandResponseReady(QString &qString);
     void socketDisconnected();
     void socketReadyRead();
 };

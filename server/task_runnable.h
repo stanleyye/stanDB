@@ -20,8 +20,10 @@ protected:
 private:
     QString command_to_parse_;
 
+signals:
+    void commandRequestReady(QString qString);
+
 public slots:
-    void responseReady(QByteArray response);
 };
 
 #endif // TASK_RUNNABLE_H

@@ -4,6 +4,9 @@ Server::Server(QObject *parent)
     : QTcpServer(parent)
 {
     QThreadPool::globalInstance()->setMaxThreadCount(max_thread_count_);
+    // Initialize a command manager
+    // TODO: memory leak. deallocate command manager
+    command_manager_ = new CommandManager(this);
 }
 
 void Server::startServer()
@@ -26,4 +29,9 @@ void Server::incomingConnection(qintptr socket_descriptor)
     Client *client = new Client(this);
     client->setSocketDescriptor(socket_descriptor);
 
+    // Chaining grandchild (task runnable instance) to the command manager
+    connect(client, SIGNAL(commandRequestReady(QString&)), command_manager_,
+            SLOT(parseCommand(QString&)));
+    connect(command_manager_, SIGNAL(commandResponseReady(QString&)), client,
+            SLOT(commandResponseReady(QString&)));
 }

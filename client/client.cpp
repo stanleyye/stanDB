@@ -11,6 +11,12 @@ qintptr Client::getSocketDescriptor()
     return socket_descriptor_;
 }
 
+void Client::commandResponseReady(QByteArray &byteArray)
+{
+    // TODO: check if socket is present. If not, return an error
+    socket_->write(response);
+}
+
 void Client::sendResponse(QByteArray response)
 {
     socket_->write(response);
@@ -57,8 +63,9 @@ void Client::socketReadyRead()
         task->setCommand(command_buffer_);
         task->setAutoDelete(true);
 
-//        connect(task, SIGNAL(responseReady(QByteArray&)), this,
-//                SLOT(sendResponse(QByteArray&)));
+        // chain signal from the task to server.cpp
+        connect(task, SIGNAL(responseReady(QByteArray&)),
+                SIGNAL(responseReady(QByteArray&)));
 
         QThreadPool::globalInstance()->start(task);
         qDebug() << "Active connections(threads): " <<

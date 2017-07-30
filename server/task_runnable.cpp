@@ -17,16 +17,5 @@ void TaskRunnable::run()
         return;
     }
 
-    qDebug() << "Starting task.";
-
-    int endTime = clock() + 6000000;
-    do { /* do nothing */ } while (clock() < endTime);
-
-    qDebug() << "Task finished";
-    // TODO: parse the commands
-}
-
-void TaskRunnable::responseReady(QByteArray response)
-{
-
+    emit commandRequestReady(command_to_parse_);
 }
